@@ -83,23 +83,24 @@ public class UserDao {
         return this.selectByQuery("SELECT * FROM public.user ORDER BY user_id ASC");
     }
 
+
     public boolean save(User user) {
         String query = "INSERT INTO public.user " +
                 "(" +
-                "user_id," +
-                "user_name, name," +
+                "user_name,"+
+                " name," +
                 " user_surname," +
-                " user_pass, user_role) " +
+                " user_pass,"+
+                " user_role" +
                 ")" +
-                "VALUES (?,?,?,?,?,?)";
+                "VALUES (?,?,?,?,?)";
         try {
             PreparedStatement ps = this.con.prepareStatement(query);
-            ps.setInt(1, user.getId());
-            ps.setString(2, user.getUsername());
-            ps.setString(3, user.getName());
-            ps.setString(4, user.getSurname());
-            ps.setString(5, user.getPass());
-            ps.setString(6, user.getRole().toString());
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getName());
+            ps.setString(3, user.getSurname());
+            ps.setString(4, user.getPass());
+            ps.setString(5, user.getRole().toString());
             return ps.executeUpdate() != -1;
 
         } catch (SQLException throwables) {
@@ -149,17 +150,21 @@ public class UserDao {
         return true;
     }
 
+
     public ArrayList<User> selectByQuery(String query) {
-        ArrayList<User> workerUserList = new ArrayList<>();
+        // System.out.println(query);
+        ArrayList<User> userList = new ArrayList<>();
+
         try {
             ResultSet rs = this.con.createStatement().executeQuery(query);
             while (rs.next()) {
-                workerUserList.add(this.match(rs));
+                userList.add(this.match(rs));
+
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
-        return workerUserList;
+        return userList;
     }
 
     public User match(ResultSet rs) throws SQLException {

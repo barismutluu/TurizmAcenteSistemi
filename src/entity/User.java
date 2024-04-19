@@ -1,6 +1,8 @@
 package entity;
 
-public class User {
+import core.ComboItem;
+
+public class User  {
 
     private int id;
     private String username;
@@ -26,6 +28,14 @@ public class User {
 //        this.pass = pass;
 //    }
 
+
+    public User(String username, String name, String surname, String pass, Role role) {
+        this.username = username;
+        this.name = name;
+        this.surname = surname;
+        this.pass = pass;
+        this.role = role;
+    }
 
     public User(int id, String username, String name, String surname, String pass, Role role) {
         this.id = id;
@@ -83,6 +93,7 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
+
 
     @Override
     public String toString() {

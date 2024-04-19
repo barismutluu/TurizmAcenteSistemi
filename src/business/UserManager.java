@@ -37,16 +37,18 @@ public class UserManager {
         return userRowList;
     }
 
+    public ArrayList<User>  searcForTable(User.Role role){
+        String query ="SELECT * FROM public.user WHERE user_role = '"+ role.toString()+ "'";
+        return this.userDao.selectByQuery(query);
 
+    }
 
     public User getById(int id) {
         return this.userDao.getById(id);
     }
 
     public boolean save(User user) {
-        if (user.getId() != 0) {
-            Helper.showMsg("error");
-        }
+
         return this.userDao.save(user);
 
     }

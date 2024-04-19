@@ -1,8 +1,7 @@
 package view;
 
 import business.UserManager;
-import core.ComboItem;
-import entity.*;
+import entity.User;
 import core.Helper;
 
 import javax.swing.*;
@@ -20,7 +19,7 @@ public class AdminView extends Layout {
     private JPanel pnl_top;
     private JTabbedPane tab_menu;
     private JTable tbl_user;
-    private JComboBox <ComboItem> cmb_role_filter;
+    private JComboBox<User.Role> cmb_role_filter;
     private JButton btn_cncl_role;
     private JButton btn_role_search;
     private UserManager userManager;
@@ -45,6 +44,7 @@ public class AdminView extends Layout {
 
         }
         btn_logout.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Butona tıklandığında çalışacak kod
@@ -52,45 +52,23 @@ public class AdminView extends Layout {
             }
         });
         this.lbl_welcome.setText("Hoşgeldin : " + this.user.getRole());
-        loadUserTable();
+        this.cmb_role_filter.setModel(new DefaultComboBoxModel<>(User.Role.values()));
+        this.cmb_role_filter.setSelectedItem(null);
+        loadUserTable(null);
         loadUserComponent();
 
-    }
-    public void roleFilter() {
-        this.cmb_role_filter.removeAllItems();
-        for (User obj : userManager.findAll()) {
-            this.cmb_role_filter.addItem(new ComboItem(obj.getId(), obj.getRole()));
-        }
-        this.cmb_role_filter.setSelectedItem(null);
+
     }
 
-    public void loadUserTable() {
-        Object[] col_user = {"Kullanıcı ID", "Kullanıcı Adı", "Adı ", " Soyadı ", "Şifre", " Rolü"};
-        ArrayList<Object[]> userList = this.userManager.getForTable(col_user.length,this.userManager.findAll());
-        this.createTable(this.tmdl_user, this.tbl_user, col_user, userList);
-        loadRoleFilter();
-//        this.btn_role_search.addActionListener(e -> {
-//            if(this.cmb_role_filter.getSelectedItem() != null){
-//                ComboItem selectedRole = (ComboItem) this.cmb_role_filter.getSelectedItem();
-//                int userId = 0;
-//                if (selectedRole != null) {
-//                    userId = selectedRole.getKey();
-//                }
-//                ArrayList<User> userListBySearch = this.userManager.searcForTable();
-//           ArrayList<Object[]> modelRowListBySearch = this.userManager.getForTable(this.col_user.length, userListBySearch);
-//            }});
-//        this.btn_cncl_role.addActionListener(e -> {
-//            this.cmb_role_filter.setSelectedItem(null);
-//
-//        });
-    }
-    public void loadRoleFilter() {
-        this.cmb_role_filter.removeAllItems();
-        for (User obj : userManager.findAll()) {
-            this.cmb_role_filter.addItem(new ComboItem(obj.getId(),obj.getRole()));
+    public void loadUserTable(ArrayList<Object[]> userList) {
+
+        this.col_user = new Object[]{"Kullanıcı ID", "Kullanıcı Adı", "Adı ", " Soyadı ", "Şifre", " Rolü"};
+        if (userList == null) {
+            userList = this.userManager.getForTable(col_user.length, this.userManager.findAll());
         }
-        this.cmb_role_filter.setSelectedItem(null);
+        this.createTable(this.tmdl_user, this.tbl_user, col_user, userList);
     }
+
 
     public void loadUserComponent() {
 
@@ -101,21 +79,32 @@ public class AdminView extends Layout {
             newUserView.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
-                    loadUserTable();
+                    loadUserTable(null);
 
                 }
             });
 
         });
         this.UserMenu.add("Güncelle").addActionListener(e -> {
-
+            int selectBrandId   = this.getTableSelectedRow(tbl_user,0);
+            NewUserView brandView = new NewUserView(this.userManager.getById(selectBrandId));
+            brandView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    loadUserTable(null);
+//                    loadModelFilterBrand();
+//                    loadCarTable();
+//                    loadRentalFilterPlate();
+                }
+            });
         });
+
         this.UserMenu.add("Sil").addActionListener(e -> {
             if (Helper.confirm("sure")) {
                 int selectUserId = this.getTableSelectedRow(tbl_user, 0);
                 if (this.userManager.delete(selectUserId)) {
                     Helper.showMsg("done");
-                    loadUserTable();
+                    loadUserTable(null);
                 } else {
                     Helper.showMsg("error");
                 }
@@ -126,23 +115,29 @@ public class AdminView extends Layout {
         this.tbl_user.setComponentPopupMenu(this.UserMenu);
 
         this.btn_role_search.addActionListener(e -> {
-            if(this.cmb_role_filter.getSelectedItem() != null){
-                ComboItem selectedBrand = (ComboItem) this.cmb_role_filter.getSelectedItem();
-                int plateId = 0;
-                if (selectedBrand != null) {
-                    plateId = selectedBrand.getKey();
-                }
-                ArrayList<User> userListBySearch = this.userManager.searcForTable(plateId);
-                ArrayList<Object[]> modelRowListBySearch = this.userManager.getForTable(this.col_rental.length, userListBySearch);
-               // loadUserTable(modelRowListBySearch);
-            }});
+//                if (this.cmb_role_filter.getSelectedItem() != null) {
+//                    ComboItem selectedUser = (ComboItem) this.cmb_role_filter.getSelectedItem();
+//                    int RoleId = 0;
+//                    if (selectedUser != null) {
+//                        RoleId = selectedUser.getKey();
+//                    }
+//                    ArrayList<User> userListBySearch = this.userManager.searcForTable(RoleId);
+//                    ArrayList<Object[]> modelRowListBySearch = this.userManager.getForTable(this.col_user.length, userListBySearch);
+//                    loadUserTable(modelRowListBySearch);
+//                }
+
+            if (this.cmb_role_filter.getSelectedItem() != null) {
+                ArrayList<User> rolListBySearch = this.userManager.searcForTable((User.Role) cmb_role_filter.getSelectedItem());
+                ArrayList<Object[]> modelRowListBySearch = this.userManager.getForTable(this.col_user.length, rolListBySearch);
+                loadUserTable(modelRowListBySearch);
+            }
+        });
         this.btn_cncl_role.addActionListener(e -> {
             this.cmb_role_filter.setSelectedItem(null);
-            loadUserTable();
+            loadUserTable(null);
         });
     }
-    }
-
+}
 
 
 //    private void loadRentalComponent() {

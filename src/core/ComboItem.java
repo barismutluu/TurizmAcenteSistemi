@@ -6,9 +6,9 @@ public class ComboItem {
     private  int key ;
     private  String value ;
 
-    public ComboItem(int key, User.Role value) {
+    public ComboItem(int key, String value) {
         this.key = key;
-        this.value = String.valueOf(value);
+        this.value = value;
     }
 
     public int getKey() {
