@@ -17,6 +17,7 @@ public class NewUserView extends Layout {
     private JTextField fld_surname;
     // private JComboBox cmb_user_role;
     private JComboBox<User.Role> cmb_user_role;
+   // private JComboBox<String> cmb_user_role;
     private JLabel lbl_heading;
     private JTextField fld_name;
     private JTextField fld_pass;
@@ -25,21 +26,23 @@ public class NewUserView extends Layout {
     private UserManager userManager;
     private User user;
 
-    public NewUserView(User newUserView) {
+    public NewUserView(User user) {
         this.userManager = new UserManager();
         this.user = user;
         add(container);
         this.guiInitilaze(300, 600);
 
+        //this.cmb_user_role = new DefaultComboBoxModel<>();
         this.cmb_user_role.setModel(new DefaultComboBoxModel<>(User.Role.values()));
-        this.cmb_user_role.setSelectedItem(null);
+        //this.cmb_user_role.setSelectedItem(null);
 
-        if(this.user != null){
+        if(this.user.getId() != 0){
 
             this.fld_user_name.setText(user.getUsername());
             this.fld_name.setText(user.getName());
             this.fld_surname.setText(user.getSurname());
             this.fld_pass.setText(user.getPass());
+            this.cmb_user_role.setSelectedItem(user.getRole());
 
         }
 
@@ -80,7 +83,7 @@ public class NewUserView extends Layout {
                     this.user.setPass(fld_pass.getText());
                     this.user.setRole((User.Role) cmb_user_role.getSelectedItem());
                     result = this.userManager.update(this.user);
-                    System.out.println("update kısmına gırdi");
+
                 }else{
                     //result=this.userManager.save(this.user);
                     User obj =new User(fld_user_name.getText(),fld_name.getText(),fld_surname.getText(),fld_pass.getText(), (User.Role) cmb_user_role.getSelectedItem());

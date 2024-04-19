@@ -43,14 +43,7 @@ public class AdminView extends Layout {
             dispose();
 
         }
-        btn_logout.addActionListener(new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Butona tıklandığında çalışacak kod
-                dispose(); // Pencereyi kapat
-            }
-        });
         this.lbl_welcome.setText("Hoşgeldin : " + this.user.getRole());
         this.cmb_role_filter.setModel(new DefaultComboBoxModel<>(User.Role.values()));
         this.cmb_role_filter.setSelectedItem(null);
@@ -68,9 +61,20 @@ public class AdminView extends Layout {
         }
         this.createTable(this.tmdl_user, this.tbl_user, col_user, userList);
     }
+public void loadUserTableu() {
+    col_user = new Object[]{"Kullanıcı ID", "Kullanıcı Adı", "Adı ", " Soyadı ", "Şifre", " Rolü"};
+    ArrayList<User> userList=this.userManager.findAll();
+    ArrayList<Object[]>userObjects=this.userManager.getForTable(col_user.length,userList);
+    createTable(this.tmdl_user, this.tbl_user, col_user, userObjects);
+}
 
 
     public void loadUserComponent() {
+
+        btn_logout.addActionListener(e -> {
+            LoginView loginView=new LoginView();
+            dispose();
+        });
 
         this.tableRowSelect(this.tbl_user);
         this.UserMenu = new JPopupMenu();
@@ -85,16 +89,16 @@ public class AdminView extends Layout {
             });
 
         });
-        this.UserMenu.add("Güncelle").addActionListener(e -> {
-            int selectBrandId   = this.getTableSelectedRow(tbl_user,0);
-            NewUserView brandView = new NewUserView(this.userManager.getById(selectBrandId));
+        this.UserMenu.add("Guncelle").addActionListener(e -> {
+            int selectUserId   = this.getTableSelectedRow(tbl_user,0);
+            NewUserView brandView = new NewUserView(this.userManager.getById(selectUserId));
             brandView.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
-                    loadUserTable(null);
-//                    loadModelFilterBrand();
-//                    loadCarTable();
-//                    loadRentalFilterPlate();
+                    loadUserTableu();
+                    // loadModelFilterBrand();
+                    // loadCarTable();
+                    // loadRentalFilterPlate();
                 }
             });
         });

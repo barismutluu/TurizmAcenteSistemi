@@ -27,21 +27,44 @@ public class LoginView extends Layout {
         this.guiInitilaze(400,400);
 
 
+//        btn_login.addActionListener(e -> {
+//
+//            JTextField[] checkFieldList ={this.fld_username,this.fld_pass};
+//            if(Helper.isFieldListEmpty(checkFieldList)){
+//                Helper.showMsg("fill");
+//            }else {
+//                User loginUser = this.userManager.findByLogin(this.fld_username.getText(),this.fld_pass.getText());
+//                if(loginUser== null){
+//                    Helper.showMsg("notFound");
+//                }else {
+//                    AdminView adminView = new AdminView(loginUser);
+//
+//                }
+//            }
+//
+//        });
+
         btn_login.addActionListener(e -> {
-
-            JTextField[] checkFieldList ={this.fld_username,this.fld_pass};
-            if(Helper.isFieldListEmpty(checkFieldList)){
-                Helper.showMsg("fill");
-            }else {
+            if (Helper.isFieldEmpty(fld_username)){
+                Helper.showMsg("Enter Username");
+            }else if (Helper.isFieldEmpty(fld_pass)){
+                Helper.showMsg("Enter Password");
+            } else {
                 User loginUser = this.userManager.findByLogin(this.fld_username.getText(),this.fld_pass.getText());
-                if(loginUser== null){
-                    Helper.showMsg("notFound");
+                if (loginUser == null){
+                    Helper.showMsg("User not found");
                 }else {
-                    AdminView adminView = new AdminView(loginUser);
-
+                    if (loginUser.getRole().toString().equals("Admin")||  loginUser.getRole().toString().equals("ADMIN")||  loginUser.getRole().toString().equals("admin")) {
+                        AdminView adminView = new AdminView(loginUser);
+                        adminView.setVisible(true);
+                        dispose();
+                    } else {
+                        EmployeeView employeeView = new EmployeeView(loginUser);
+                        employeeView.setVisible(true);
+                        dispose();
+                    }
                 }
             }
-
         });
     }
 
