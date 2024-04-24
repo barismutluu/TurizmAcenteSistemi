@@ -21,40 +21,23 @@ public class LoginView extends Layout {
     private JLabel lbl_pass;
     private final UserManager userManager;
 
-    public LoginView(){
-        this.userManager=new UserManager();
+    public LoginView() {
+        this.userManager = new UserManager();
         add(container);
-        this.guiInitilaze(400,400);
+        this.guiInitilaze(400, 400);
 
-
-//        btn_login.addActionListener(e -> {
-//
-//            JTextField[] checkFieldList ={this.fld_username,this.fld_pass};
-//            if(Helper.isFieldListEmpty(checkFieldList)){
-//                Helper.showMsg("fill");
-//            }else {
-//                User loginUser = this.userManager.findByLogin(this.fld_username.getText(),this.fld_pass.getText());
-//                if(loginUser== null){
-//                    Helper.showMsg("notFound");
-//                }else {
-//                    AdminView adminView = new AdminView(loginUser);
-//
-//                }
-//            }
-//
-//        });
 
         btn_login.addActionListener(e -> {
-            if (Helper.isFieldEmpty(fld_username)){
+            if (Helper.isFieldEmpty(fld_username)) {
                 Helper.showMsg("Enter Username");
-            }else if (Helper.isFieldEmpty(fld_pass)){
+            } else if (Helper.isFieldEmpty(fld_pass)) {
                 Helper.showMsg("Enter Password");
             } else {
-                User loginUser = this.userManager.findByLogin(this.fld_username.getText(),this.fld_pass.getText());
-                if (loginUser == null){
+                User loginUser = this.userManager.findByLogin(this.fld_username.getText(), this.fld_pass.getText());
+                if (loginUser == null) {
                     Helper.showMsg("User not found");
-                }else {
-                    if (loginUser.getRole().toString().equals("Admin")||  loginUser.getRole().toString().equals("ADMIN")||  loginUser.getRole().toString().equals("admin")) {
+                } else {
+                    if (loginUser.getRole().toString().equals("Admin") || loginUser.getRole().toString().equals("ADMIN") || loginUser.getRole().toString().equals("admin")) {
                         AdminView adminView = new AdminView(loginUser);
                         adminView.setVisible(true);
                         dispose();

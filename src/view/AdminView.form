@@ -22,7 +22,7 @@
             </constraints>
             <properties>
               <font size="14" style="1"/>
-              <text value="Hoşgeldin kullanıcı"/>
+              <text value="Welcome User"/>
             </properties>
           </component>
           <hspacer id="4c343">
@@ -35,7 +35,7 @@
               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Çıkış Yap"/>
+              <text value="Exit"/>
             </properties>
           </component>
         </children>
@@ -89,7 +89,7 @@
                       <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Temizle"/>
+                      <text value="Clean"/>
                     </properties>
                   </component>
                   <component id="ab7f7" class="javax.swing.JButton" binding="btn_role_search">
@@ -97,7 +97,7 @@
                       <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Arama Yap"/>
+                      <text value="Search"/>
                     </properties>
                   </component>
                 </children>

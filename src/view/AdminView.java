@@ -6,10 +6,7 @@ import core.Helper;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class AdminView extends Layout {
@@ -29,6 +26,15 @@ public class AdminView extends Layout {
     private Object[] col_rental;
     private User user;
     private DefaultTableModel tmdl_user = new DefaultTableModel();
+    private JTable tbl_room;
+
+    public JTable getTbl_room() {
+        return tbl_room;
+    }
+
+    public void setTbl_room(JTable tbl_room) {
+        this.tbl_room = tbl_room;
+    }
 
 
     public AdminView(User user) {
@@ -44,41 +50,55 @@ public class AdminView extends Layout {
 
         }
 
-        this.lbl_welcome.setText("Hoşgeldin : " + this.user.getRole());
+        this.lbl_welcome.setText("Welcome : " + this.user.getRole());
         this.cmb_role_filter.setModel(new DefaultComboBoxModel<>(User.Role.values()));
         this.cmb_role_filter.setSelectedItem(null);
         loadUserTable(null);
         loadUserComponent();
 
-
+        tableRowSelect(tbl_room);
     }
 
     public void loadUserTable(ArrayList<Object[]> userList) {
 
-        this.col_user = new Object[]{"Kullanıcı ID", "Kullanıcı Adı", "Adı ", " Soyadı ", "Şifre", " Rolü"};
+        this.col_user = new Object[]{"User ID", "User Name", "Name ", " Surname ", "Password", " Role"};
         if (userList == null) {
             userList = this.userManager.getForTable(col_user.length, this.userManager.findAll());
         }
         this.createTable(this.tmdl_user, this.tbl_user, col_user, userList);
     }
-public void loadUserTableu() {
-    col_user = new Object[]{"Kullanıcı ID", "Kullanıcı Adı", "Adı ", " Soyadı ", "Şifre", " Rolü"};
-    ArrayList<User> userList=this.userManager.findAll();
-    ArrayList<Object[]>userObjects=this.userManager.getForTable(col_user.length,userList);
-    createTable(this.tmdl_user, this.tbl_user, col_user, userObjects);
-}
+
+    public void loadUserTableu() {
+        col_user = new Object[]{"User ID", "User Name", "Name ", " Surname ", "Password", " Role"};
+        ArrayList<User> userList = this.userManager.findAll();
+        ArrayList<Object[]> userObjects = this.userManager.getForTable(col_user.length, userList);
+        createTable(this.tmdl_user, this.tbl_user, col_user, userObjects);
+    }
+
+    @Override
+    public void tableRowSelect(JTable table) {
+        table.addMouseListener(new MouseAdapter() {
+
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                int selected_row = table.rowAtPoint(e.getPoint());
+                table.setRowSelectionInterval(selected_row, selected_row);
+            }
+        });
+    }
 
 
     public void loadUserComponent() {
 
         btn_logout.addActionListener(e -> {
-            LoginView loginView=new LoginView();
+            LoginView loginView = new LoginView();
             dispose();
         });
 
         this.tableRowSelect(this.tbl_user);
         this.UserMenu = new JPopupMenu();
-        this.UserMenu.add("Yeni").addActionListener(e -> {
+        this.UserMenu.add("New").addActionListener(e -> {
             NewUserView newUserView = new NewUserView(new User());
             newUserView.addWindowListener(new WindowAdapter() {
                 @Override
@@ -89,21 +109,19 @@ public void loadUserTableu() {
             });
 
         });
-        this.UserMenu.add("Guncelle").addActionListener(e -> {
-            int selectUserId   = this.getTableSelectedRow(tbl_user,0);
+        this.UserMenu.add("Update").addActionListener(e -> {
+            int selectUserId = this.getTableSelectedRow(tbl_user, 0);
             NewUserView brandView = new NewUserView(this.userManager.getById(selectUserId));
             brandView.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
                     loadUserTableu();
-                    // loadModelFilterBrand();
-                    // loadCarTable();
-                    // loadRentalFilterPlate();
+
                 }
             });
         });
 
-        this.UserMenu.add("Sil").addActionListener(e -> {
+        this.UserMenu.add("Delete").addActionListener(e -> {
             if (Helper.confirm("sure")) {
                 int selectUserId = this.getTableSelectedRow(tbl_user, 0);
                 if (this.userManager.delete(selectUserId)) {
@@ -119,16 +137,6 @@ public void loadUserTableu() {
         this.tbl_user.setComponentPopupMenu(this.UserMenu);
 
         this.btn_role_search.addActionListener(e -> {
-//                if (this.cmb_role_filter.getSelectedItem() != null) {
-//                    ComboItem selectedUser = (ComboItem) this.cmb_role_filter.getSelectedItem();
-//                    int RoleId = 0;
-//                    if (selectedUser != null) {
-//                        RoleId = selectedUser.getKey();
-//                    }
-//                    ArrayList<User> userListBySearch = this.userManager.searcForTable(RoleId);
-//                    ArrayList<Object[]> modelRowListBySearch = this.userManager.getForTable(this.col_user.length, userListBySearch);
-//                    loadUserTable(modelRowListBySearch);
-//                }
 
             if (this.cmb_role_filter.getSelectedItem() != null) {
                 ArrayList<User> rolListBySearch = this.userManager.searcForTable((User.Role) cmb_role_filter.getSelectedItem());
@@ -142,30 +150,6 @@ public void loadUserTableu() {
         });
     }
 }
-
-
-//    private void loadRentalComponent() {
-//        this.tableRowSelect(this.tbl_user);
-//
-//        this.rental_Menu = new JPopupMenu();
-//        this.tbl_user.setComponentPopupMenu(this.rental_Menu);
-//
-//        this.btn_role_search.addActionListener(e -> {
-//            if(this.cmb_role_filter.getSelectedItem() != null){
-//                ComboItem selectedBrand = (ComboItem) this.cmb_role_filter.getSelectedItem();
-//                int plateId = 0;
-//                if (selectedBrand != null) {
-//                    plateId = selectedBrand.getKey();
-//                }
-//                ArrayList<User> userListBySearch = this.userManager.searcForTable(plateId);
-//                ArrayList<Object[]> modelRowListBySearch = this.userManager.getForTable(this.col_rental.length, userListBySearch);
-//                loadUserTable();
-//            }});
-//        this.btn_cncl_role.addActionListener(e -> {
-//            this.cmb_role_filter.setSelectedItem(null);
-//            loadUserTable();
-//        });
-//    }
 
 
 

@@ -7,20 +7,27 @@ import entity.User;
 import javax.management.relation.Role;
 import java.util.ArrayList;
 
+// Class that manages user operations
 public class UserManager {
-    private  final UserDao userDao ;
+    private final UserDao userDao;
 
     public UserManager() {
         this.userDao = new UserDao();
     }
 
-    public User findByLogin(String username ,String password){
-        return this.userDao.findByLogin(username,password);
+    //method for matching information on the login screen
+    public User findByLogin(String username, String password) {
+        return this.userDao.findByLogin(username, password);
 
     }
-    public ArrayList<User> findAll(){return this.userDao.findAll();}
 
-    public ArrayList<Object[]> getForTable(int size,ArrayList<User>userList) {
+    // Method to fetch all users
+    public ArrayList<User> findAll() {
+        return this.userDao.findAll();
+    }
+
+    // Method that provides the necessary information for the table
+    public ArrayList<Object[]> getForTable(int size, ArrayList<User> userList) {
         ArrayList<Object[]> userRowList = new ArrayList<>();
         for (User obj : userList) {
             int i = 0;
@@ -37,22 +44,25 @@ public class UserManager {
         return userRowList;
     }
 
-    public ArrayList<User>  searcForTable(User.Role role){
-        String query ="SELECT * FROM public.user WHERE user_role = '"+ role.toString()+ "'";
+    public ArrayList<User> searcForTable(User.Role role) {
+        String query = "SELECT * FROM public.user WHERE user_role = '" + role.toString() + "'";
         return this.userDao.selectByQuery(query);
 
     }
 
+    //Method that retrieves the user with a specific ID
     public User getById(int id) {
         return this.userDao.getById(id);
     }
 
+    //Method that adds the user save to the database
     public boolean save(User user) {
 
         return this.userDao.save(user);
 
     }
 
+    //Method that updates user information
     public boolean update(User user) {
         if (this.getById(user.getId()) == null) {
             Helper.showMsg("notFound");
@@ -60,53 +70,16 @@ public class UserManager {
         return this.userDao.update(user);
     }
 
+    //Method that deletes a user with a specific ID
     public boolean delete(int id) {
 
         if (this.getById(id) == null) {
-            Helper.showMsg(id + " ID kayıtlı marka bulunamadı");
+            Helper.showMsg(id + " ID registered not found");
             return false;
         }
 
         return this.userDao.delete(id);
 
-
-    }
-
-    public ArrayList<User>  searcForTable(int user_id, Role role){
-        String select ="SELECT * FROM public.user";
-        ArrayList<String> whereList = new ArrayList<>();
-        if (user_id != 0){
-            whereList.add("user_id = " + user_id);
-        }
-        if(role != null ){
-            whereList.add("user_role ='"+role.toString()+"'");
-        }
-
-        String whereStr = String.join(" AND ",whereList);
-        String query=select;
-        if(whereStr.length() > 0){
-            query +=  " WHERE "+whereStr;
-
-        }
-        return this.userDao.selectByQuery(query);
-
-    }
-
-    public ArrayList<User>  searcForTable(int userId){
-        String select ="SELECT * FROM public.user ";
-        ArrayList<String> whereList = new ArrayList<>();
-        if (userId != 0){
-            whereList.add("user_id = " +userId );
-
-        }
-        String whereStr = String.join(" AND ",whereList);
-        String query=select;
-        if(whereStr.length() > 0){
-            query +=  " WHERE "+whereStr;
-
-        }
-
-        return this.userDao.selectByQuery(query);
 
     }
 

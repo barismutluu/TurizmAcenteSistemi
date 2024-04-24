@@ -13,24 +13,6 @@ public class UserDao {
         this.con = Db.getInstance();
     }
 
-    //    public ArrayList <User>  findAll(){
-//        ArrayList<User> userList = new ArrayList<>();
-//        String sql ="SELECT * FROM public.user";
-//        try {
-//            //ResultSet rs =this.con.createStatement().executeQuery(sql);
-//            Statement st =this.con.createStatement();
-//            ResultSet rs =st.executeQuery(sql);
-//
-//            while(rs.next()){
-//                userList.add(this.match(rs));
-//
-//            }
-//
-//        }catch (SQLException e){
-//            e.printStackTrace();
-//        }
-//        return userList;
-//    }
     public User findByLogin(String username, String password) {
         User obj = null;
         String query = "SELECT * FROM public.user WHERE  user_name = ? AND  user_pass = ? ";
@@ -51,14 +33,6 @@ public class UserDao {
 
 
     }
-//    public User  match(ResultSet rs) throws SQLException {
-//        User obj   = new User();
-//        obj.setId(rs.getInt("user_id"));
-//        obj.setUsername(rs.getString("user_name"));
-//        obj.setUsername(rs.getString("user_pass"));
-//        obj.setRole(rs.getString("user_role"));
-//        return obj;
-//    }
 
     public User getById(int id) {
         User obj = null;
@@ -153,7 +127,6 @@ public class UserDao {
 
 
     public ArrayList<User> selectByQuery(String query) {
-        // System.out.println(query);
         ArrayList<User> userList = new ArrayList<>();
 
         try {

@@ -2,7 +2,7 @@ package entity;
 
 import core.ComboItem;
 
-public class User  {
+public class User {
 
     private int id;
     private String username;
@@ -15,19 +15,11 @@ public class User  {
     public User() {
 
     }
+
     public enum Role {
         ADMIN,
         PERSONEL
     }
-
-//    public User(int id, String username, String name, String surname, String pass, String role) {
-//        this.id = id;
-//        this.username = username;
-//        this.name = name;
-//        this.surname = surname;
-//        this.pass = pass;
-//    }
-
 
     public User(String username, String name, String surname, String pass, Role role) {
         this.username = username;

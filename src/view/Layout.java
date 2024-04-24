@@ -10,16 +10,16 @@ import java.util.ArrayList;
 
 public class Layout extends JFrame {
 
-    public void guiInitilaze(int width , int height){
+    public void guiInitilaze(int width, int height) {
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle("Turizm Acente");
-        setSize(width,height);
-        setLocation(Helper.getLocationPoint("x",this.getSize()),Helper.getLocationPoint("y",this.getSize()));
+        setSize(width, height);
+        setLocation(Helper.getLocationPoint("x", this.getSize()), Helper.getLocationPoint("y", this.getSize()));
         setVisible(true);
     }
 
-    public void createTable(DefaultTableModel model , JTable table, Object[] columns, ArrayList<Object[]> rows){
+    public void createTable(DefaultTableModel model, JTable table, Object[] columns, ArrayList<Object[]> rows) {
         model.setColumnIdentifiers(columns);
         table.setModel(model);
         table.getTableHeader().setReorderingAllowed(false);
@@ -29,26 +29,26 @@ public class Layout extends JFrame {
         DefaultTableModel clearModel = (DefaultTableModel) table.getModel();
         clearModel.setRowCount(0);
 
-        if(rows==null){
-            rows=new ArrayList<>();
+        if (rows == null) {
+            rows = new ArrayList<>();
         }
-        for(Object[] row : rows){
+        for (Object[] row : rows) {
             model.addRow(row);
         }
 
     }
 
-    public int getTableSelectedRow(JTable table,int index){
+    public int getTableSelectedRow(JTable table, int index) {
 
-        return Integer.parseInt(table.getValueAt(table.getSelectedRow(),index) .toString());
+        return Integer.parseInt(table.getValueAt(table.getSelectedRow(), index).toString());
     }
 
-    public void tableRowSelect(JTable table){
+    public void tableRowSelect(JTable table) {
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 int selected_row = table.rowAtPoint(e.getPoint());
-                table.setRowSelectionInterval(selected_row,selected_row);
+                table.setRowSelectionInterval(selected_row, selected_row);
             }
         });
     }

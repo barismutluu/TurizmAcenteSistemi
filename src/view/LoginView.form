@@ -22,7 +22,7 @@
             </constraints>
             <properties>
               <font size="24" style="1"/>
-              <text value="Turizm Acente"/>
+              <text value="Tourism Agency"/>
             </properties>
           </component>
           <component id="2d21c" class="javax.swing.JLabel" binding="lbl_welcome2">
@@ -32,7 +32,7 @@
             <properties>
               <enabled value="true"/>
               <font size="24" style="1"/>
-              <text value="Yönetim Sistemi"/>
+              <text value="Management System"/>
             </properties>
           </component>
         </children>
@@ -51,7 +51,7 @@
             </constraints>
             <properties>
               <font style="1"/>
-              <text value="Kullanici Adınız"/>
+              <text value="User Name"/>
             </properties>
           </component>
           <vspacer id="ac4ad">
@@ -73,7 +73,7 @@
             </constraints>
             <properties>
               <font style="1"/>
-              <text value="Şifreniz"/>
+              <text value="Password"/>
             </properties>
           </component>
           <component id="2019c" class="javax.swing.JButton" binding="btn_login">
@@ -81,7 +81,7 @@
               <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Giriş Yap"/>
+              <text value="Login"/>
             </properties>
           </component>
           <component id="bc560" class="javax.swing.JPasswordField" binding="fld_pass">

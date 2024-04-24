@@ -7,14 +7,13 @@ import java.lang.runtime.SwitchBootstraps;
 
 public class Helper {
 
-    public static void  setTheme() {
-
-        for(UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()){
-            if("Nimbus".equals(info.getName())) {
+    public static void setTheme() {
+//Method that sets the theme
+        for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+            if ("Nimbus".equals(info.getName())) {
                 try {
                     UIManager.setLookAndFeel(info.getClassName());
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
@@ -22,57 +21,66 @@ public class Helper {
         }
 
     }
-    public static void showMsg(String str){
-        optionPayneTR();
+
+    //Method that displays message
+    public static void showMsg(String str) {
+        optionPayneEN();
         String msg;
         String title;
         switch (str) {
             case "fill" -> {
-                msg = "Lütfen tüm alanları doldurunuz !";
-                title = "Hata!";
+                msg = "Please fill in all fields !";
+                title = "Error!";
             }
             case "done" -> {
-                msg = "İşlem Başarılı !";
-                title = "Sonuç";
+                msg = "Transaction Successful !";
+                title = "conclusion";
             }
             case "notFound" -> {
-                msg ="Kayıt bulunamadı !";
-                title = "Bulunamadı";
+                msg = "No Records Found !";
+                title = "Not found";
             }
             case "error" -> {
-                msg = "Hatalı işlem yaptınız !";
-                title = "Hata!";
+                msg = "You made a mistake !";
+                title = "Error!";
             }
             default -> {
                 msg = str;
-                title = "Mesaj";
+                title = "Message";
             }
         }
         JOptionPane.showMessageDialog(null, msg, title, JOptionPane.INFORMATION_MESSAGE);
     }
-    public  static  boolean confirm(String str){
-        optionPayneTR();
-        String msg;
-        if(str.equals("sure")){
-            msg="Bu işlemi yapmak istediginize eminmisiniz !!";
 
-        }else{
-            msg=str;
+    public static boolean confirm(String str) {
+        optionPayneEN();
+        String msg;
+        if (str.equals("sure")) {
+            msg = "Are you sure you want to do this? !!";
+
+        } else {
+            msg = str;
         }
-        return JOptionPane.showConfirmDialog(null,msg,"Eminmisiniz",JOptionPane.YES_NO_OPTION)==0;
+        return JOptionPane.showConfirmDialog(null, msg, "Are you sure", JOptionPane.YES_NO_OPTION) == 0;
 
     }
-    public static boolean isFieldListEmpty(JTextField[] fieldList){
-        for (JTextField field :fieldList){
-            if(isFieldEmpty(field)) return true;
+
+    //Method to check if JTextField is empty or not
+    public static boolean isFieldListEmpty(JTextField[] fieldList) {
+        for (JTextField field : fieldList) {
+            if (isFieldEmpty(field)) return true;
         }
         return false;
     }
-    public  static  boolean  isFieldEmpty(JTextField field){
+
+    //Method to check if JTextField is empty or not
+    public static boolean isFieldEmpty(JTextField field) {
         return field.getText().trim().isEmpty();
 
     }
-    public static  int getLocationPoint(String type, Dimension size){
+
+    //Method that adjusts the position of the window
+    public static int getLocationPoint(String type, Dimension size) {
         return switch (type) {
             case "x" -> (Toolkit.getDefaultToolkit().getScreenSize().width - size.width) / 2;
             case "y" -> (Toolkit.getDefaultToolkit().getScreenSize().height - size.height) / 2;
@@ -80,10 +88,11 @@ public class Helper {
         };
     }
 
-    public static void optionPayneTR(){
-        UIManager.put("OptionPane.okButtonText","Tamam");
-        UIManager.put("OptionPane.yesButtonText","Evet");
-        UIManager.put("OptionPane.noButtonText","Hayır");
+    //Method that sets the language settings
+    public static void optionPayneEN() {
+        UIManager.put("OptionPane.okButtonText", "OK");
+        UIManager.put("OptionPane.yesButtonText", "YES");
+        UIManager.put("OptionPane.noButtonText", "NO");
 
 
     }
