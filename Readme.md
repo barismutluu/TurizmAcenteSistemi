@@ -56,10 +56,14 @@ Not:Veri tabanı dosyası database klasöründedir.
 
 ## Ekran Görüntüleri
 
-1. ![Giris Ekranı](figures/login.png)
-2. ![Admin Ekranı](figures/admin.png)
-3. ![Otel Ekranı](figures/hotel.png)
-4. ![Oda Ekranı](figures/room.png)
-5. ![Rezarvasyon Ekranı](figures/rezervasyon.png)
+ ![Giris Ekranı](login.png)
+
+ ![Admin Ekranı](admin.png)
+
+ ![Otel Ekranı](hotel.png)
+
+ ![Oda Ekranı](room.png)
+
+ ![Rezarvasyon Ekranı](rezervasyon.png)
 
 
