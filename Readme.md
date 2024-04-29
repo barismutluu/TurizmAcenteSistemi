@@ -1,8 +1,8 @@
 # Patika Turizm Acentesi Yazılımı
 
 Bu proje, Patika Turizm Acentesi'nin günlük operasyonlarını dijitalleştirmek ve müşteri rezervasyon süreçlerini optimize etmek amacıyla geliştirilmiştir.
-Video adresi:https://youtu.be/GeAM8AMUH0k
-Not:Veri tabanı dosayası database klasörünündedir.
+Video adresi:https://youtu.be/g5Dty7ybb8M
+Not:Veri tabanı dosyası database klasöründedir.
 
 ## Özellikler
 
@@ -56,10 +56,10 @@ Not:Veri tabanı dosayası database klasörünündedir.
 
 ## Ekran Görüntüleri
 
-1. ![Giriş Ekranı](figures/login.png)
+1. ![Giris Ekranı](figures/login.png)
 2. ![Admin Ekranı](figures/admin.png)
 3. ![Otel Ekranı](figures/hotel.png)
 4. ![Oda Ekranı](figures/room.png)
-5. ![Dönem Ekranı](figures/season.png)
+5. ![Rezarvasyon Ekranı](figures/rezervasyon.png)
 
 
