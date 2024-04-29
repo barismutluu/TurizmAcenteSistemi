@@ -54,6 +54,7 @@ public class AddRoomView extends Layout {
         this.seasonManager = new SeasonManager();
         this.hotelManager = new HotelManager();
         this.roomManager = new RoomManager();
+
         for (Hotel hotel : hotelManager.findAll()) {
             this.cmb_room_add_hotel.addItem(hotel.getComboItem());
         }
@@ -63,14 +64,14 @@ public class AddRoomView extends Layout {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                ComboItem selectedOtelItem = (ComboItem) cmb_room_add_hotel.getSelectedItem();
-                int selectedOtelId = selectedOtelItem.getKey();
-                ArrayList<Pension> pensions = pensionManager.getPensionByOtelId(((ComboItem) cmb_room_add_hotel.getSelectedItem()).getKey());
-                System.out.println("pensions: " + pensions);
-                cmb_pension_add.removeAllItems();
+                int selectedHotelId = ((ComboItem) cmb_room_add_hotel.getSelectedItem()).getKey();
 
-                for (Pension pension : pensions) {
-                    cmb_pension_add.addItem(pension.getComboItem());
+                if (selectedHotelId != 0) {
+                    cmb_pension_add.removeAllItems();
+                    for (Pension pension : pensionManager.getPensionByOtelId(selectedHotelId)) {
+                        cmb_pension_add.addItem(pension.getComboItem());
+                        System.out.println("pensions: " + pension);
+                    }
                 }
 
                 ArrayList<Season> seasons = seasonManager.getSeasonsByOtelId(((ComboItem) cmb_room_add_hotel.getSelectedItem()).getKey());
@@ -92,6 +93,7 @@ public class AddRoomView extends Layout {
                 if (Helper.isFieldListEmpty(selectedRoomList)) {
                     Helper.showMsg("fill");
                 } else {
+                    String stockText = fld_stock.getText();
                     boolean result = false;
                     ComboItem selectedHotel = (ComboItem) cmb_room_add_hotel.getSelectedItem();
                     ComboItem selectedPension = (ComboItem) cmb_pension_add.getSelectedItem();
@@ -99,8 +101,8 @@ public class AddRoomView extends Layout {
                     room.setSeason_id(selectedSeason.getKey());
                     room.setPension_id(selectedPension.getKey());
                     room.setHotel_id(selectedHotel.getKey());
-                    room.setType((String) cmb_room_type_add.getSelectedItem());
-                    room.setStock(Integer.parseInt(fld_stock.getText()));
+                    room.setType(String.valueOf(cmb_room_type_add.getSelectedItem()));
+                    room.setStock(Integer.parseInt(stockText));
                     room.setAdult_price(Double.parseDouble(fld_adult_price.getText()));
                     room.setChild_price(Double.parseDouble(fld_child_price.getText()));
                     room.setBed_capacity(Integer.parseInt(fld_bed_capacity.getText()));

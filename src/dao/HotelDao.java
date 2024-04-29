@@ -36,6 +36,7 @@ public class HotelDao {
 
     }
 
+
     public ArrayList<Hotel> findAll() {
 
         return this.selectByQuery("SELECT * FROM public.hotel ORDER BY hotel_id ASC");
@@ -120,7 +121,7 @@ public class HotelDao {
             ps.setBoolean(12, hotel.isConcierge());
             ps.setBoolean(13, hotel.isSpa());
             ps.setBoolean(14, hotel.isRoom_service());
-            ps.setInt(15,hotel.getId());
+            ps.setInt(15, hotel.getId());
             return ps.executeUpdate() != -1;
 
         } catch (SQLException throwables) {

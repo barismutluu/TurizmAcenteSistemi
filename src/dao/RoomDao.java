@@ -1,8 +1,10 @@
 package dao;
 
+import core.ComboItem;
 import core.Db;
 import entity.Pension;
 import entity.Room;
+import entity.Season;
 import entity.User;
 
 import javax.xml.crypto.Data;
@@ -37,6 +39,25 @@ public class RoomDao {
             e.printStackTrace();
         }
         return obj;
+    }
+
+    public ArrayList<Room> getRoomsByOtelId(int hotelId) {
+        ArrayList<Room> rooms = new ArrayList<>();
+        String query = "SELECT * FROM public.hotel_season WHERE hotel_id = ?";
+
+        try (PreparedStatement pr = con.prepareStatement(query)) {
+            pr.setInt(1, hotelId);
+            ResultSet rs = pr.executeQuery();
+
+            while (rs.next()) {
+                Room room = match(rs);
+                rooms.add(room);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return rooms;
     }
 
 
@@ -133,8 +154,9 @@ public class RoomDao {
     }
 
 
+    // Method to update the stock information of a room
     public boolean updateStock(Room room) {
-        String query = "UPDATE public.room SET stock = ? WHERE id = ? ";
+        String query = "UPDATE public.room SET room_stock = ? WHERE room_id = ? ";
         try {
             PreparedStatement pr = this.con.prepareStatement(query);
             pr.setInt(1, room.getStock());

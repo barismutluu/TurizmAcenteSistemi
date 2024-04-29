@@ -1,5 +1,6 @@
 package business;
 
+import core.ComboItem;
 import core.Helper;
 import dao.RoomDao;
 import entity.Pension;
@@ -33,7 +34,9 @@ public class RoomManager {
             int i = 0;
             Object[] rowObject = new Object[size];
             rowObject[i++] = obj.getId();
-            rowObject[i++] = hotelManager.getById(obj.getHotel_id()).getName();
+            rowObject[i++] = obj.getHotel_id();
+            rowObject[i++] = obj.getHotel().getName();
+            rowObject[i++] = obj.getHotel().getCity();
             rowObject[i++] = obj.getPension_id();
             rowObject[i++] = obj.getSeason_id();
             rowObject[i++] = obj.getType();
@@ -59,7 +62,6 @@ public class RoomManager {
         }
         return this.roomDao.save(room);
     }
-
 
     //Method that updates the room stock
     public boolean updateStock(Room room) {

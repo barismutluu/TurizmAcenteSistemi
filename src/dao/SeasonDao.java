@@ -39,7 +39,7 @@ public class SeasonDao {
 
     public Season getByID(int id) {
         Season obj = null;
-        String query = "SELECT * FROM public.hotel_season WHERE id = ? ";
+        String query = "SELECT * FROM public.hotel_season WHERE season_id = ? ";
         try {
             PreparedStatement pr = this.con.prepareStatement(query);
             pr.setInt(1, id);
@@ -101,7 +101,7 @@ public class SeasonDao {
 
     public boolean delete(int hotel_id) {
         try {
-            String query = "DELETE FROM public.hotel_season WHERE id = ?";
+            String query = "DELETE FROM public.hotel_season WHERE season_id = ?";
             PreparedStatement pr = con.prepareStatement(query);
             pr.setInt(1, hotel_id);
             return pr.executeUpdate() != -1;

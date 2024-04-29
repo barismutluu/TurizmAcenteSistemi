@@ -17,7 +17,6 @@ public class Pension {
     }
 
 
-
     public int getId() {
         return id;
     }
@@ -49,7 +48,7 @@ public class Pension {
     @Override
     public String toString() {
         return "Pension{" +
-                "id=" + id +
+                "pension_id=" + id +
                 ", pension_type='" + pension_type + '\'' +
                 ", hotel_id=" + hotel_id +
                 '}';

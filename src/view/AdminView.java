@@ -26,7 +26,7 @@ public class AdminView extends Layout {
     private Object[] col_rental;
     private User user;
     private DefaultTableModel tmdl_user = new DefaultTableModel();
-    private JTable tbl_room;
+    private JTable tbl_room = new JTable();
 
     public JTable getTbl_room() {
         return tbl_room;

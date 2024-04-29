@@ -1,7 +1,5 @@
 package entity;
 
-import core.ComboItem;
-
 public class User {
 
     private int id;
@@ -18,7 +16,7 @@ public class User {
 
     public enum Role {
         ADMIN,
-        PERSONEL
+        EMPLOYEE
     }
 
     public User(String username, String name, String surname, String pass, Role role) {

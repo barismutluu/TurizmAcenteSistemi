@@ -245,7 +245,7 @@
             </constraints>
             <properties>
               <font size="14" style="1"/>
-              <text value="Room Add/ Update"/>
+              <text value="Room Add"/>
             </properties>
           </component>
         </children>

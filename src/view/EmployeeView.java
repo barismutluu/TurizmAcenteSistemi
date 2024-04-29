@@ -1,11 +1,10 @@
 package view;
 
-import business.HotelManager;
-import business.PensionManager;
-import business.RoomManager;
-import business.SeasonManager;
+import business.*;
 import core.ComboItem;
 import core.Helper;
+import dao.BookingDao;
+import entity.Booking;
 import entity.Hotel;
 import entity.Room;
 import entity.User;
@@ -36,7 +35,6 @@ public class EmployeeView extends Layout {
     private SeasonManager seasonManager = new SeasonManager();
     private PensionManager pensionManager = new PensionManager();
     private JPopupMenu season_menu;
-    private JTable tbl_season;
     private JButton btn_season_add;
     private JTable tbl_pension;
     private JPopupMenu pension_menu;
@@ -50,11 +48,19 @@ public class EmployeeView extends Layout {
     private JButton room_search_btn;
     private JButton btn_room_clean;
     private JButton btn_room_add;
-    private JTable table1;
+    private JTable tbl_booking;
+    private JPanel pnl_booking;
+    private JScrollPane scl_booking;
+    private JButton btn_addbooking;
+    private JTable tbl_season;
+    private JButton btn_reservation;
+    private JButton btn_booking_update;
+    private JButton btn_booking_delete;
     private User user;
     private DefaultTableModel tmdl_hotels = new DefaultTableModel();
     private HotelManager hotelManager;
     private JPopupMenu HotelMenu;
+    private JPopupMenu BookingMenu;
     private Object[] col_room;
     DefaultTableModel tmdl_season = new DefaultTableModel();
     DefaultTableModel tmdl_pension = new DefaultTableModel();
@@ -64,15 +70,23 @@ public class EmployeeView extends Layout {
     DefaultTableModel tmdl_room = new DefaultTableModel();
     DefaultTableModel tmdl_res = new DefaultTableModel();
     private Room room;
+    private Booking booking;
+    private BookingDao bookingDao;
+    private BookingManager bookingManager;
+    private JPopupMenu booking_menu;
+    private DefaultTableModel default_table_booking = new DefaultTableModel();
+    String hotelName = null;
+    String selectedCity = null;
 
     public EmployeeView(User user) {
 
         this.hotelManager = new HotelManager();
         this.season_menu = new JPopupMenu();
         this.pension_menu = new JPopupMenu();
+        this.bookingManager = new BookingManager();
         this.room_menu = new JPopupMenu();
         add(container);
-        this.guiInitilaze(1000, 500);
+        this.guiInitilaze(1500, 1000);
 
         this.user = user;
         if (this.user == null) {
@@ -89,25 +103,30 @@ public class EmployeeView extends Layout {
         loadRoomTable(null);
         LoadRoomTableComponent();
 
+
+        loadBookingTable();
+        loadBookingComponent();
+
         for (Hotel hotel : this.hotelManager.findAll()) {
             this.cmb_hotel_name.addItem(new ComboItem(hotel.getId(), hotel.getName()));
         }
-
+        this.cmb_hotel_name.setSelectedItem(null);
         for (Hotel hotel : this.hotelManager.findAll()) {
             this.cmb_city.addItem(new ComboItem(hotel.getId(), hotel.getCity()));
         }
-
+        this.cmb_city.setSelectedItem(null);
         room_search_btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JTextField[] roomJTextField = new JTextField[]{fld_date_entry_room, fld_date_release_room};
 
+
                 ArrayList<Room> roomList = roomManager.searchForRooms(
                         fld_date_entry_room.getText(),
-                        fld_date_release_room.getText(),
-                        ((ComboItem) cmb_city.getSelectedItem()).getValue(),
-                        ((ComboItem) cmb_hotel_name.getSelectedItem()).getValue()
+                        fld_date_release_room.getText(), selectedCity, hotelName
+
                 );
+
 
                 ArrayList<Object[]> searchResult = roomManager.getForTable(col_room.length, roomList);
                 loadRoomTable(searchResult);
@@ -116,7 +135,78 @@ public class EmployeeView extends Layout {
 
 
         });
+        btn_booking_delete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedReservationId = getTableSelectedRow(tbl_booking, 0);
+                int selectedRoomId = getTableSelectedRow(tbl_booking, 1);
+                if (selectedReservationId != -1) {
+                    if (Helper.confirm("sure")) {
+                        if (bookingManager.delete(selectedReservationId)) {
+                            Helper.showMsg("done");
+
+                            // Rezervasyon silindiğinde odaya ait stok miktarını artır
+                            Room room = roomManager.getById(selectedRoomId);
+                            room.setStock(room.getStock() + 1);
+                            roomManager.updateStock(room);
+
+                            loadBookingTable();
+                            loadRoomTable(null);
+
+                        } else {
+                            Helper.showMsg("error");
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(EmployeeView.this, "Please select a Reservation.", "No Reservation Selected", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+
+        btn_booking_update.addActionListener(e -> {
+            int selectedRoomId = this.getTableSelectedRow(tbl_booking, 1);
+            int selectedHotelId = this.getTableSelectedRow(tbl_booking, 12);
+            int selectedPensionId = this.getTableSelectedRow(tbl_booking, 13);
+            int selectedSeasonId = this.getTableSelectedRow(tbl_booking, 14);
+            int selectedBookingId = this.getTableSelectedRow(tbl_booking, 0);
+            if (selectedRoomId != -1) {
+                UpdateBookingView updateBookingView = new UpdateBookingView(this.roomManager.getById(selectedRoomId), this.hotelManager.getById(selectedHotelId), this.pensionManager.getById(selectedPensionId), this.seasonManager.getById(selectedSeasonId), this.bookingManager.getById(selectedBookingId));
+                updateBookingView.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        loadRoomTable(null);
+                        loadBookingTable();
+                        loadBookingComponent();
+                    }
+                });
+            } else {
+                JOptionPane.showMessageDialog(EmployeeView.this, "Please select a hotel.", "No Hotel Selected", JOptionPane.WARNING_MESSAGE);
+            }
+        });
+        cmb_hotel_name.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ComboItem hotelNameComboItem = (ComboItem) cmb_hotel_name.getSelectedItem();
+                if (hotelNameComboItem != null) {
+                    hotelName = hotelNameComboItem.getValue();
+                } else {
+                    hotelName = null;
+                }
+            }
+        });
+        cmb_city.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ComboItem hotelNameComboItem = (ComboItem) cmb_city.getSelectedItem();
+                if (hotelNameComboItem != null) {
+                    selectedCity = hotelNameComboItem.getValue();
+                } else {
+                    selectedCity = null;
+                }
+            }
+        });
     }
+
 
     public void loadHotelTable() {
         Object[] col_hotel_list = {"Otel ID", "Otel Name", "City ", " Area ", "Adress", " E-Mail", "Phone", "Star", "Car Park", "Wifi", "Pool", "Fitness", "Concierge", "Spa", "Room Services"};
@@ -138,11 +228,27 @@ public class EmployeeView extends Layout {
     }
 
     public void loadRoomTable(ArrayList<Object[]> roomList) {
-        col_room = new Object[]{"ID", "Hotel ID", "Pension ID", "Season ID", "Type", "Stock", "Adult Price", "Child Price", "Bed Capacity", "Square Meter", "Television", "Minibar", "Game Console", "Cash BOX", "Projection"};
+        col_room = new Object[]{"ID", "Hotel ID", "Hotel Name", "City", "Pension ID", "Season ID", "Type", "Stock", "Adult Price", "Child Price", "Bed Capacity", "Square Meter", "Television", "Minibar", "Game Console", "Cash BOX", "Projection"};
         if (roomList == null) {
             roomList = roomManager.getForTable(col_room.length, this.roomManager.findAll());
         }
         createTable(this.tmdl_room, tbl_room, col_room, roomList);
+    }
+
+    private void loadBookingTable() {
+        Object[] columnsOfBookingTable = {"Rezervation.ID", "Room ID", "Guest Name", "Guest ID", "Email", "Phone", "Adult", "Child", "Check-in", "Checkout", "Note", "Total Price", "Hotel Id", "P.ID", "Season ID"};
+        ArrayList<Object[]> bookingList = this.bookingManager.getForTable(columnsOfBookingTable.length, this.bookingManager.findAll());
+
+        this.createTable(this.default_table_booking, this.tbl_booking, columnsOfBookingTable, bookingList);
+    }
+
+
+    private void loadBookingComponent() {
+        //get the reservation the user clicked
+        tableRowSelect(this.tbl_booking);
+
+        //add the popup menu to the component
+        this.tbl_booking.setComponentPopupMenu(booking_menu);
     }
 
 
@@ -150,23 +256,25 @@ public class EmployeeView extends Layout {
 
         tableRowSelect(tbl_room);
 
-        room_menu.add("ADD Reservation").addActionListener(e -> {
-            int selectId = this.getTableSelectedRow(tbl_room, 0);
-
+        btn_reservation.addActionListener(e -> {
+            int selectedRoomId = this.getTableSelectedRow(tbl_room, 0);
+            int selectedHotelId = this.getTableSelectedRow(tbl_room, 1);
+            int selectedPensionId = this.getTableSelectedRow(tbl_room, 4);
+            int selectedSeasonId = this.getTableSelectedRow(tbl_room, 5);
+            if (selectedRoomId != -1) {
+                AddBookingView addBookingView = new AddBookingView(this.roomManager.getById(selectedRoomId), this.hotelManager.getById(selectedHotelId), this.pensionManager.getById(selectedPensionId), this.seasonManager.getById(selectedSeasonId));
+                addBookingView.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        loadRoomTable(null);
+                        loadBookingTable();
+                        loadBookingComponent();
+                    }
+                });
+            } else {
+                JOptionPane.showMessageDialog(EmployeeView.this, "Please select a hotel.", "No Hotel Selected", JOptionPane.WARNING_MESSAGE);
+            }
         });
-
-        room_menu.add("Update").addActionListener(e -> {
-            int selectRoomId = this.getTableSelectedRow(tbl_room, 0);
-            AddRoomView addRoomView = new AddRoomView();
-            addRoomView.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    loadRoomTable(null);
-
-                }
-            });
-        });
-
         room_menu.add("Delete").addActionListener(e -> {
             if (Helper.confirm("sure")) {
                 int selectBrandId = this.getTableSelectedRow(tbl_room, 0);
@@ -209,7 +317,7 @@ public class EmployeeView extends Layout {
 
         this.tableRowSelect(this.tbl_hotels);
         this.HotelMenu = new JPopupMenu();
-        this.HotelMenu.add("Yeni").addActionListener(e -> {
+        this.HotelMenu.add("Add").addActionListener(e -> {
             NewHotelView newHotelView = new NewHotelView(new Hotel());
             newHotelView.addWindowListener(new WindowAdapter() {
                 @Override
@@ -302,10 +410,11 @@ public class EmployeeView extends Layout {
             }
 
         });
+        this.tableRowSelect(this.tbl_pension);
         pension_menu.add("Delete").addActionListener(e -> {
-            int selectPensiondId = this.getTableSelectedRow(tbl_pension, 0);
             if (Helper.confirm("sure")) {
-                if (this.pensionManager.delete(selectPensiondId)) {
+                int selectBrandId = this.getTableSelectedRow(tbl_pension, 0);
+                if (this.pensionManager.delete(selectBrandId)) {
                     Helper.showMsg("done");
                     loadPensionTable();
 
@@ -316,6 +425,7 @@ public class EmployeeView extends Layout {
             }
         });
         this.tbl_pension.setComponentPopupMenu(pension_menu);
+
         btn_season_add.addActionListener(e -> {
             AddSeasonView addSeasonView = new AddSeasonView();
             addSeasonView.addWindowListener(new WindowAdapter() {
@@ -338,6 +448,7 @@ public class EmployeeView extends Layout {
             }
         });
         this.tbl_hotels.setComponentPopupMenu(this.HotelMenu);
+
     }
 
     private void createUIComponents() throws ParseException {

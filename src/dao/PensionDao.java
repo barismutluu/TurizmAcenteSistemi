@@ -25,7 +25,7 @@ public class PensionDao {
 
     public ArrayList<Pension> getPensionByOtelId(int id) {
         ArrayList<Pension> pensions = new ArrayList<>();
-        String query = "SELECT * FROM public.hotel_pension WHERE hotel_id = ?";
+        String query = "SELECT * FROM public.pension WHERE hotel_id = ?";
 
         try (PreparedStatement pr = con.prepareStatement(query)) {
             pr.setInt(1, id);
@@ -45,7 +45,7 @@ public class PensionDao {
 
     public Pension getByID(int id) {
         Pension obj = null;
-        String query = "SELECT * FROM public.hotel_pension WHERE id = ? ";
+        String query = "SELECT * FROM public.pension WHERE pension_id = ? ";
         try {
             PreparedStatement pr = this.con.prepareStatement(query);
             pr.setInt(1, id);
@@ -73,7 +73,7 @@ public class PensionDao {
 
     public boolean update(Pension pension) {
         try {
-            String query = "UPDATE public.hotel_pension SET " +
+            String query = "UPDATE public.pension SET " +
                     "hotel_id = ?," +
                     "pension_type = ?" +
                     "WHERE user_id = ?";
@@ -91,7 +91,7 @@ public class PensionDao {
 
     public ArrayList<Pension> findAll() {
         ArrayList<Pension> pensionList = new ArrayList<>();
-        String sql = "SELECT * FROM public.hotel_pension";
+        String sql = "SELECT * FROM public.pension";
         try {
             ResultSet rs = this.con.createStatement().executeQuery(sql);
             while (rs.next()) {
@@ -106,7 +106,7 @@ public class PensionDao {
 
 
     public boolean save(Pension pension) {
-        String query = "INSERT INTO public.hotel_pension" +
+        String query = "INSERT INTO public.pension" +
                 "(" +
                 "hotel_id," +
                 "pension_type" +
@@ -125,7 +125,7 @@ public class PensionDao {
 
     public boolean delete(int hotel_id) {
         try {
-            String query = "DELETE FROM public.hotel_pension WHERE id = ?";
+            String query = "DELETE FROM public.pension WHERE pension_id = ?";
             PreparedStatement pr = con.prepareStatement(query);
             pr.setInt(1, hotel_id);
             return pr.executeUpdate() != -1;

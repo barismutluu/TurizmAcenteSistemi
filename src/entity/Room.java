@@ -2,6 +2,9 @@ package entity;
 
 import business.HotelManager;
 import business.PensionManager;
+import core.ComboItem;
+
+import java.util.ArrayList;
 
 public class Room {
     private int id;
@@ -192,24 +195,25 @@ public class Room {
         this.projection = projection;
     }
 
+
     @Override
     public String toString() {
         return "Room{" +
-                "id=" + id +
+                "room_id=" + id +
                 ", hotel_id=" + hotel_id +
                 ", pension_id=" + pension_id +
                 ", season_id=" + season_id +
-                ", type='" + type + '\'' +
-                ", stock=" + stock +
-                ", adult_price=" + adult_price +
-                ", child_price=" + child_price +
-                ", bed_capacity=" + bed_capacity +
-                ", square_meter=" + square_meter +
-                ", television=" + television +
-                ", minibar=" + minibar +
-                ", game_console=" + game_console +
-                ", cash_box=" + cash_box +
-                ", projection=" + projection +
+                ", room_type='" + type + '\'' +
+                ", room_stock=" + stock +
+                ", room_adult_price=" + adult_price +
+                ", room_child_price=" + child_price +
+                ", room_bed_capacity=" + bed_capacity +
+                ", room_square_meter=" + square_meter +
+                ", room_television=" + television +
+                ", room_minibar=" + minibar +
+                ", room_game_console=" + game_console +
+                ", room_cash_box=" + cash_box +
+                ", room_projection=" + projection +
                 '}';
     }
 
@@ -217,6 +221,8 @@ public class Room {
         HotelManager hotelManager = new HotelManager();
         return hotelManager.getById(hotel_id);
     }
+
+
 
     public Pension getPension() {
         PensionManager pensionManager = new PensionManager();

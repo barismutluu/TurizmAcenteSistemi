@@ -19,7 +19,7 @@ public class Db {
             // Establish database connection
             this.connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASS);
         } catch (SQLException e) {
-// In case of error, print the error message to the screen
+            // In case of error, print the error message to the screen
             System.out.println(e.getMessage());
         }
 

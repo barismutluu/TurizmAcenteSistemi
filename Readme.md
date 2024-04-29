@@ -1,8 +1,8 @@
 # Patika Turizm Acentesi Yazılımı
 
-NOT:Pansiyon kısmı eksiktir.
 Bu proje, Patika Turizm Acentesi'nin günlük operasyonlarını dijitalleştirmek ve müşteri rezervasyon süreçlerini optimize etmek amacıyla geliştirilmiştir.
 Video adresi:https://youtu.be/GeAM8AMUH0k
+Not:Veri tabanı dosayası database klasörünündedir.
 
 ## Özellikler
 

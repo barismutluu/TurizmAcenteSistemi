@@ -38,11 +38,6 @@ public class Layout extends JFrame {
 
     }
 
-    public int getTableSelectedRow(JTable table, int index) {
-
-        return Integer.parseInt(table.getValueAt(table.getSelectedRow(), index).toString());
-    }
-
     public void tableRowSelect(JTable table) {
         table.addMouseListener(new MouseAdapter() {
             @Override
@@ -52,4 +47,15 @@ public class Layout extends JFrame {
             }
         });
     }
+
+    // Retrieves the ID of the selected row in the table
+    int getTableSelectedRow(JTable table, int col_index) {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+            return Integer.parseInt(table.getModel().getValueAt(selectedRow, col_index).toString());
+
+        }
+        return -1;
+    }
+
 }
