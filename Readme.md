@@ -42,13 +42,13 @@ Not:Veri tabanı dosyası database klasöründedir.
 
 3. **Acente Çalışanı Yetkilendirme:** Acente çalışanı girişi yaparak otel yönetimi, oda yönetimi, dönem yönetimi, fiyat yönetimi, oda arama ve rezervasyon işlemlerini gerçekleştirebilir.
 
-4. **Otel Ekleme:** Acente çalışanı otel ekranından yeni otel ekleyebilir, var olan otelleri görüntüleyebilir ve düzenleyebilir.
+4. **Otel Ekleme:** Acente çalışanı otel ekranından yeni otel ekleyebilir, var olan otelleri görüntüleyebilir ve silebilir.
 
-5. **Oda Ekleme:** Acente çalışanı oda ekranından yeni oda ekleyebilir, var olan odaları görüntüleyebilir ve düzenleyebilir.
+5. **Oda Ekleme:** Acente çalışanı oda ekranından yeni oda ekleyebilir, var olan odaları görüntüleyebilir ve silebilir.
 
-6. **Dönem Ekleme:** Acente çalışanı dönem ekranından yeni dönem ekleyebilir, var olan dönemleri görüntüleyebilir ve düzenleyebilir.
+6. **Dönem Ekleme:** Acente çalışanı dönem ekranından yeni dönem ekleyebilir, var olan dönemleri görüntüleyebilir ve silebilir.
 
-7. **Fiyat Ekleme:** Acente çalışanı fiyat ekranından yeni fiyat ekleyebilir, var olan fiyatları görüntüleyebilir ve düzenleyebilir.
+7. **Fiyat Ekleme:** Acente çalışanı fiyat ekranından yeni fiyat ekleyebilir, var olan fiyatları görüntüleyebilir .
 
 8. **Oda Arama:** Acente çalışanı istediği tarih aralığına, şehre veya otel adına göre oda arayabilir.
 
