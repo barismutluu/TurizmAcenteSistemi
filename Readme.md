@@ -16,7 +16,7 @@ Not:Veri tabanı dosyası database klasöründedir.
 
 ## Kullanılan Teknolojiler
 
-- Veritabanı: MySQL
+- Veritabanı: Postegro
 - Arayüz: JavaFX
 - Dil: Java
 
